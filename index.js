@@ -1,27 +1,22 @@
-const aedes = require('aedes')();
-const http = require('http');
-const ws = require('ws');
+const aedes = require('aedes')()
+const http = require('http')
+const websocket = require('websocket-stream')
 
-// HTTP server on port 8080 (WebSocket MQTT)
-const server = http.createServer();
-const wss = new ws.Server({ server });
+const port = process.env.PORT || 443 // Render exposes HTTP/WebSocket on 443
 
-const PORT = process.env.PORT || 8080;
+const server = http.createServer()
+websocket.createServer({ server }, aedes.handle)
 
-wss.on('connection', (stream) => {
-  const connection = aedes.handle(stream);
-});
+server.listen(port, () => {
+  console.log(`MQTT broker running on ws://localhost:${port}`)
+})
 
-aedes.on('client', (client) => {
-  console.log(`Client Connected: ${client.id}`);
-});
+aedes.on('client', client => {
+  console.log(`Client connected: ${client.id}`)
+})
 
 aedes.on('publish', (packet, client) => {
   if (client) {
-    console.log(`Message from ${client.id} on topic "${packet.topic}": ${packet.payload.toString()}`);
+    console.log(`Message from ${client.id} on ${packet.topic}: ${packet.payload.toString()}`)
   }
-});
-
-server.listen(PORT, () => {
-  console.log(`MQTT broker running on ws://localhost:${PORT}`);
-});
+})
