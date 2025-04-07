@@ -10,7 +10,9 @@
   "description": "",
   "dependencies": {
     "aedes": "^0.51.3",
-    "ws": "^8.18.1",
-    "websocket-stream": "^5.5.2"
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "websocket-stream": "^5.5.2",
+    "ws": "^8.18.1"
   }
 }
