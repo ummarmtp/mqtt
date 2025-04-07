@@ -1,21 +1,16 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const port = process.env.PORT || 3000;
 
-const aedes = require("aedes")();
-const net = require("net");
+app.use(bodyParser.json());
 
-const PORT = 1883;
-
-const server = net.createServer(aedes.handle);
-
-server.listen(PORT, () => {
-  console.log(`🚀 MQTT broker running on mqtt://localhost:${PORT}`);
+app.post('/data', (req, res) => {
+  console.log('Received JSON:', req.body);
+  res.sendStatus(200);
 });
 
-aedes.on("client", (client) => {
-  console.log(`Client connected: ${client.id}`);
+app.listen(port, () => {
+  console.log(`HTTP server listening on port ${port}`);
 });
-
-aedes.on("publish", (packet, client) => {
-  if (client) {
-    console.log(`📨 Message from ${client.id}: ${packet.payload.toString()}`);
-  }
-});
+s
